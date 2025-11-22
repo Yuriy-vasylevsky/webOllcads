@@ -1,0 +1,233 @@
+/* 🌈 Глобальні змінні теми */
+:root {
+  --accent: #ffde59;      /* Жовтий міньйон-акцент */
+  --muted: #b4b4b4;       /* Приглушений сірий текст */
+  --card-w: 90px;         /* Ширина карти */
+  --card-h: 150px;        /* Висота карти */
+  --radius: 8px;          /* Радіус скруглення */
+  --dur: 800ms;           /* Тривалість фліпу (на всяк випадок) */
+}
+
+/* 📱 Дуже маленькі екрани */
+@media (max-width: 370px) {
+  :root {
+    --card-w: 80px;
+    --card-h: 130px;
+  }
+
+  .cards-grid {
+    gap: 12px 6px;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Comic Neue", system-ui;
+  color: #fff8d9;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .7);
+  background: radial-gradient(circle at 50% 20%, #2e3192 0%, #1b1464 40%, #0b0f14 90%);
+  background-image: url("images/bg_minion_magic.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+/* Загальна сітка */
+.wrap {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 10px;
+}
+
+/* Хедер */
+header {
+  text-align: center;
+  padding: 16px 8px 0;
+}
+header h1 {
+  margin: 0;
+  font-size: 30px;
+  color: var(--accent);
+  text-shadow: 0 0 6px rgba(0, 0, 0, .8);
+}
+.subtitle {
+  font-size: 16px;
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+/* Основна панель */
+.panel {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.stage {
+  background: rgba(0, 0, 0, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 12px;
+}
+.hint {
+  color: var(--muted);
+  font-size: 16px;
+  margin: 6px 0 18px;
+  text-align: center;
+}
+
+/* Галерея */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.gallery-section {
+  margin-bottom: 4px;
+}
+
+.arcana-title {
+  margin: 4px 0 10px;
+  font-size: 20px;
+  color: var(--accent);
+  text-shadow: 0 0 5px rgba(0, 0, 0, .7);
+}
+
+/* Сітка карт: 3 в ряд */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 10px;
+  justify-items: center;
+}
+
+/* На дуже вузьких екранах можна дозволити трохи щільніше */
+@media (max-width: 420px) {
+  .cards-grid {
+    gap: 12px 6px;
+  }
+}
+
+/* Обгортка однієї карти в галереї */
+.gallery-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* Візуальна карта */
+.gallery-card .card {
+  width: var(--card-w);
+  height: var(--card-h);
+  perspective: 1000px;
+  border-radius: var(--radius);
+  position: relative;
+}
+
+/* Внутрішній контейнер */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--dur) ease;
+}
+
+/* Сторони карти */
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, .5),
+    inset 0 0 0 2px rgba(255, 222, 89, .4);
+}
+
+/* Задня сторона – сорочка */
+.face.back {
+  background: url("images/cards/back_minion.jpg") center/cover no-repeat;
+}
+
+/* Передня сторона */
+.face.front {
+  transform: rotateY(180deg);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Фліп — показуємо перед */
+.card.flip .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Підпис під картою */
+.card-caption {
+  font-size: 13px;
+  color: #fff8d9;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Футер */
+footer {
+  text-align: center;
+  color: #bfbfbf;
+  font-size: 13px;
+  padding: 12px;
+}
+
+/* Станові класи */
+.hidden {
+  display: none !important;
+}
+.fade {
+  animation: fade .35s ease both;
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Повноекранний перегляд карти */
+.card-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+}
+.card-modal-inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(255, 222, 89, 0.4);
+}
+.card-modal-inner img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
